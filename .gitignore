@@ -1,3 +1,8 @@
+# -----------------------------------------------------------------------------
+# IS601 - Assignment 7: Dockerizing the QR Code Generator Application
+# Author: Nandan Kumar
+# -----------------------------------------------------------------------------
+
 venv
 images
 .python_history# Byte-compiled / optimized / DLL files

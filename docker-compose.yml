@@ -17,7 +17,7 @@ services:
     # Environment variables for the container
     environment:
       - QR_CODE_DIR=/app/qr_codes
-      - FILL_COLOR=red
+      - FILL_COLOR=blue
       - BACK_COLOR=white
 
     # Mount local directory to container for persistent QR files

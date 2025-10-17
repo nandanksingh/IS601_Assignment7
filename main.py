@@ -22,7 +22,7 @@ load_dotenv()
 # Environment-based configuration
 # ---------------------------------------------------------------------------
 QR_DIRECTORY = os.getenv('QR_CODE_DIR', 'qr_codes')  # Directory to save QR codes
-FILL_COLOR = os.getenv('FILL_COLOR', 'red')          # Default fill color
+FILL_COLOR = os.getenv('FILL_COLOR', 'blue')          # Default fill color
 BACK_COLOR = os.getenv('BACK_COLOR', 'white')        # Default background color
 
 # ---------------------------------------------------------------------------
@@ -77,9 +77,9 @@ def generate_qr_code(data: str, path: Path, fill_color: str, back_color: str):
         with path.open("wb") as qr_file:
             img.save(qr_file)
 
-        logging.info(f"✅ QR code successfully saved to {path}")
+        logging.info(f" QR code successfully saved to {path}")
     except Exception as e:
-        logging.error(f"❌ Error during QR code generation: {e}")
+        logging.error(f" Error during QR code generation: {e}")
 
 # ---------------------------------------------------------------------------
 # Main entry point

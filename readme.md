@@ -1,264 +1,169 @@
-# 📦 Project Setup
+# Assignment 7: Dockerizing the QR Code Generator Application
+**Submitted by:** Nandan Kumar
+**GitHub Repository:** : https://github.com/nandanksingh/IS601_Assignment7 
+**DockerHub Repository:** : https://hub.docker.com/repository/docker/nandanksingh/is601_assignment7 
 
----
 
-# 🧩 1. Install Homebrew (Mac Only)
+## Objective:
 
-> Skip this step if you're on Windows.
+The goal of this assignment was to Dockerize a Python-based QR Code Generator application.
+The task involved building a secure Docker image, running the application inside a container, and pushing the final image to DockerHub.
 
-Homebrew is a package manager for macOS.  
-You’ll use it to easily install Git, Python, Docker, etc.
+This assignment helped me understand how containerization makes applications portable, efficient, and consistent across environments.
 
-**Install Homebrew:**
+## Setup: 
+## Step 1 – Setting Up the Environment
 
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+Since I am using Windows 11, I installed and configured the following tools:
+
+* Git for Windows – to clone and manage code repositories
+* Python 3.12 or higher – to test and verify the QR Code Generator application
+* Docker Desktop (with WSL2 backend) – to build and run containers
+
+After installation, I verified each tool with these commands:
+
 ```
-
-**Verify Homebrew:**
-
-```bash
-brew --version
-```
-
-If you see a version number, you're good to go.
-
----
-
-# 🧩 2. Install and Configure Git
-
-## Install Git
-
-- **MacOS (using Homebrew)**
-
-```bash
-brew install git
-```
-
-- **Windows**
-
-Download and install [Git for Windows](https://git-scm.com/download/win).  
-Accept the default options during installation.
-
-**Verify Git:**
-
-```bash
 git --version
-```
-
----
-
-## Configure Git Globals
-
-Set your name and email so Git tracks your commits properly:
-
-```bash
-git config --global user.name "Your Name"
-git config --global user.email "your_email@example.com"
-```
-
-Confirm the settings:
-
-```bash
-git config --list
-```
-
----
-
-## Generate SSH Keys and Connect to GitHub
-
-> Only do this once per machine.
-
-1. Generate a new SSH key:
-
-```bash
-ssh-keygen -t ed25519 -C "your_email@example.com"
-```
-
-(Press Enter at all prompts.)
-
-2. Start the SSH agent:
-
-```bash
-eval "$(ssh-agent -s)"
-```
-
-3. Add the SSH private key to the agent:
-
-```bash
-ssh-add ~/.ssh/id_ed25519
-```
-
-4. Copy your SSH public key:
-
-- **Mac/Linux:**
-
-```bash
-cat ~/.ssh/id_ed25519.pub | pbcopy
-```
-
-- **Windows (Git Bash):**
-
-```bash
-cat ~/.ssh/id_ed25519.pub | clip
-```
-
-5. Add the key to your GitHub account:
-   - Go to [GitHub SSH Settings](https://github.com/settings/keys)
-   - Click **New SSH Key**, paste the key, save.
-
-6. Test the connection:
-
-```bash
-ssh -T git@github.com
-```
-
-You should see a success message.
-
----
-
-# 🧩 3. Clone the Repository
-
-Now you can safely clone the course project:
-
-```bash
-git clone <repository-url>
-cd <repository-directory>
-```
-
----
-
-# 🛠️ 4. Install Python 3.10+
-
-## Install Python
-
-- **MacOS (Homebrew)**
-
-```bash
-brew install python
-```
-
-- **Windows**
-
-Download and install [Python for Windows](https://www.python.org/downloads/).  
-✅ Make sure you **check the box** `Add Python to PATH` during setup.
-
-**Verify Python:**
-
-```bash
-python3 --version
-```
-or
-```bash
 python --version
+docker --version
 ```
+
+All tools were installed successfully and ready to use.
 
 ---
 
-## Create and Activate a Virtual Environment
+## Step 2 – Running the Python Application Locally
 
-(Optional but recommended)
+Before containerizing the project, I verified that the Python code worked correctly on my system.
 
-```bash
-python3 -m venv venv
-source venv/bin/activate   # Mac/Linux
-venv\Scripts\activate.bat  # Windows
 ```
-
-### Install Required Packages
-
-```bash
+python -m venv venv
+venv\Scripts\activate
 pip install -r requirements.txt
+python main.py --url http://www.njit.edu
 ```
+
+The application generated a QR code image and saved it inside the **qr_codes** folder.
+This confirmed that all dependencies were installed and the script was functioning properly before moving to Docker.
 
 ---
 
-# 🐳 5. (Optional) Docker Setup
+## Step 3 – Writing the Dockerfile
 
-> Skip if Docker isn't used in this module.
+I created a Dockerfile that defines the steps to build and run the application inside a container.
+The Dockerfile uses the lightweight **python:3.12-slim-bullseye** base image, installs dependencies, creates a non-root user for security, and defines the entry point for the application.
 
-## Install Docker
+Key points included in the Dockerfile:
 
-- [Install Docker Desktop for Mac](https://www.docker.com/products/docker-desktop/)
-- [Install Docker Desktop for Windows](https://www.docker.com/products/docker-desktop/)
+* Uses a minimal base image for better performance
+* Installs dependencies from requirements.txt
+* Creates a non-root user named "myuser"
+* Configures directories for logs and generated QR codes
+* Uses ENTRYPOINT and CMD for flexible runtime arguments
 
-## Build Docker Image
-
-```bash
-docker build -t <image-name> .
-```
-
-## Run Docker Container
-
-```bash
-docker run -it --rm <image-name>
-```
+This Dockerfile ensures that the application runs securely and efficiently inside the container.
 
 ---
 
-# 🚀 6. Running the Project
+## Step 4 – Building the Docker Image
 
-- **Without Docker**:
+I built the Docker image using the following command:
 
-```bash
-python main.py
+```
+docker build -t nandanksingh/is601_assignment7 .
 ```
 
-(or update this if the main script is different.)
+The image built successfully without errors.
+I confirmed the image was available locally using:
 
-- **With Docker**:
-
-```bash
-docker run -it --rm <image-name>
+```
+docker images
 ```
 
----
+## Step 5 – Running the Docker Container
 
-# 📝 7. Submission Instructions
+Once the image was built, I ran the container to test the QR Code Generator.
 
-After finishing your work:
-
-```bash
-git add .
-git commit -m "Complete Module X"
-git push origin main
+```
+docker run -d --name qr-generator nandanksingh/is601_assignment7
+docker logs qr-generator
 ```
 
-Then submit the GitHub repository link as instructed.
+The logs showed that the QR code was created successfully and saved in the container’s **/app/qr_codes** directory.
+
+To save the generated QR code file to my local system, I used volume mapping:
+
+```
+docker run -d --name qr-njit ^
+ -v %cd%\qr_codes:/app/qr_codes ^
+ nandanksingh/is601_assignment7 --url http://www.njit.edu
+```
+
+The QR code was generated and saved in my local **qr_codes** folder, confirming that the container and host system were properly connected.
 
 ---
 
-# 🔥 Useful Commands Cheat Sheet
+## Step 6 – Using Docker Compose (Optional)
 
-| Action                         | Command                                          |
-| ------------------------------- | ------------------------------------------------ |
-| Install Homebrew (Mac)          | `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"` |
-| Install Git                     | `brew install git` or Git for Windows installer |
-| Configure Git Global Username  | `git config --global user.name "Your Name"`      |
-| Configure Git Global Email     | `git config --global user.email "you@example.com"` |
-| Clone Repository                | `git clone <repo-url>`                          |
-| Create Virtual Environment     | `python3 -m venv venv`                           |
-| Activate Virtual Environment   | `source venv/bin/activate` / `venv\Scripts\activate.bat` |
-| Install Python Packages        | `pip install -r requirements.txt`               |
-| Build Docker Image              | `docker build -t <image-name> .`                |
-| Run Docker Container            | `docker run -it --rm <image-name>`               |
-| Push Code to GitHub             | `git add . && git commit -m "message" && git push` |
+I also tested the Docker Compose file provided in the project to simplify running the container.
+
+```
+docker-compose up --build -d
+docker-compose logs -f
+docker-compose down
+```
+
+The compose file automatically built the image, passed environment variables, and mapped local directories.
+It worked correctly and produced the same results as the direct Docker commands.
 
 ---
 
-# 📋 Notes
+## Step 7 – Pushing the Image to DockerHub
 
-- Install **Homebrew** first on Mac.
-- Install and configure **Git** and **SSH** before cloning.
-- Use **Python 3.10+** and **virtual environments** for Python projects.
-- **Docker** is optional depending on the project.
+After confirming the container worked correctly, I pushed my image to DockerHub.
+
+```
+docker login
+docker push nandanksingh/is601_assignment7
+```
+
+The image is now available publicly and can be pulled using:
+
+```
+docker pull nandanksingh/is601_assignment7
+```
+
+This ensures that anyone can access and run my containerized application.
 
 ---
 
-# 📎 Quick Links
+## Reflection:
 
-- [Homebrew](https://brew.sh/)
-- [Git Downloads](https://git-scm.com/downloads)
-- [Python Downloads](https://www.python.org/downloads/)
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-- [GitHub SSH Setup Guide](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)
+This assignment provided valuable hands-on experience with Docker and containerization.
+I learned how to:
+
+* Build and run Python applications inside Docker containers
+* Use environment variables and volume mounts for flexibility
+* Apply security best practices by running containers with non-root users
+* Push and manage Docker images on DockerHub
+
+I also gained a better understanding of how Docker simplifies deployment and ensures application consistency across different systems.
+Working with WSL2 and Docker on Windows helped me appreciate how closely modern development environments simulate Linux systems for container-based workflows.
+
+---
+
+## Conclusion:
+
+This was one of the most practical and informative assignments of the course.
+It combined the concepts of Python programming, version control, and Docker-based deployment into a single project.
+
+By completing this assignment, I now have a strong understanding of:
+
+* Creating Dockerfiles
+* Building and testing container images
+* Running applications securely in isolated environments
+* Sharing and distributing containers using DockerHub
+
+This project gave me confidence in working with modern DevOps tools and applying them in real-world software development workflows.
+
+
