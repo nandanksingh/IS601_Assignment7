@@ -1,14 +1,39 @@
-version: '3.8'
+version: "3.8"
+
+# -------------------------------------------------------------------
+# IS601 - Assignment 7: Dockerizing the QR Code Generator Application
+# Author: Nandan Kumar
+# GitHub: https://github.com/nandanksingh/IS601_Assignment7
+# DockerHub: https://hub.docker.com/repository/docker/nandanksingh/is601_assignment7
+# -------------------------------------------------------------------
 
 services:
   qr_code_app:
+    container_name: qr_code_generator
     build:
       context: .
       dockerfile: Dockerfile
+
+    # Environment variables for the container
     environment:
       - QR_CODE_DIR=/app/qr_codes
       - FILL_COLOR=red
       - BACK_COLOR=white
+
+    # Mount local directory to container for persistent QR files
     volumes:
-      - ./qr_codes:/app/qr_codes  # Maps the local 'qr_codes' directory to '/app/qr_codes' in the container
-    command: --url http://www.njit.edu  # Replace 'main.py' with your script's filename if different
+      - ./qr_codes:/app/qr_codes
+
+    # Override CMD from Dockerfile to use a custom URL
+    command: ["--url", "http://www.njit.edu"]
+
+    # Automatically restart container if it stops
+    restart: unless-stopped
+
+
+# -------------------------------------------------------------------
+# Usage:
+#   docker-compose up --build -d
+#   docker-compose logs -f
+#   docker-compose down
+# -------------------------------------------------------------------
