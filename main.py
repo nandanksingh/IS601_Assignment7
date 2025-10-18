@@ -93,7 +93,7 @@ def main():
     parser.add_argument(
         "--url",
         help="URL to encode in the QR code.",
-        default="https://github.com/nandanksingh/IS601_Assignment7",
+        default="https://www.njit.edu",
     )
     args = parser.parse_args()
 

@@ -137,6 +137,13 @@ This ensures that anyone can access and run my containerized application.
 
 ---
 
+## QR codes:
+## GitHub Repository Image
+![GitHub QR Code](./qr_codes/QRCode_20251017210937.png "GitHub Repository QR Code")
+
+## DockerHub Image 
+![DockerHub QR Code](./qr_codes/QRCode_20251017210937.png "DockerHub Repository QR Code")
+
 ## Reflection:
 
 This assignment provided valuable hands-on experience with Docker and containerization.
