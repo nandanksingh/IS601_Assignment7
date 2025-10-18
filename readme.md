@@ -1,7 +1,7 @@
 # Assignment 7: Dockerizing the QR Code Generator Application
 **Submitted by:** Nandan Kumar
 **GitHub Repository:** : https://github.com/nandanksingh/IS601_Assignment7 
-**DockerHub Repository:** : https://hub.docker.com/repository/docker/nandanksingh/is601_assignment7 
+**DockerHub Repository:** : https://hub.docker.com/repository/docker/nandanksingh/is601_qr_code_generator 
 
 
 ## Objective:
